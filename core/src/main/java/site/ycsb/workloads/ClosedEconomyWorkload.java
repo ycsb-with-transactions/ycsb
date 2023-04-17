@@ -1,11 +1,11 @@
 /**
- * Copyright (c) 2010-2016 Yahoo! Inc., 2017 YCSB contributors All rights reserved.
- *
+ * Copyright (c) 2010 Yahoo! Inc. All rights reserved. 
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you
  * may not use this file except in compliance with the License. You
  * may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0 
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,66 +15,25 @@
  * LICENSE file.
  */
 
-package site.ycsb;
+package com.yahoo.ycsb.workloads;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.Properties;
-
+import com.yahoo.ycsb.*;
 
 /**
- * One experiment scenario. One object of this type will
- * be instantiated and shared among all client threads. This class
- * should be constructed using a no-argument constructor, so we can
- * load it dynamically. Any argument-based initialization should be
- * done by init().
+ * The core benchmark scenario. Represents a set of clients doing simple CRUD
+ * operations. The relative proportion of different kinds of operations, and
+ * other properties of the workload, are controlled by parameters specified at
+ * runtime.
  * 
- * If you extend this class, you should support the "insertstart" property. This
- * allows the Client to proceed from multiple clients on different machines, in case
- * the client is the bottleneck. For example, if we want to load 1 million records from
- * 2 machines, the first machine should have insertstart=0 and the second insertstart=500000. Additionally,
- * the "insertcount" property, which is interpreted by Client, can be used to tell each instance of the
- * client how many inserts to do. In the example above, both clients should have insertcount=500000.
  */
-public abstract class Workload {
-  public static final String INSERT_START_PROPERTY = "insertstart";
-  public static final String INSERT_COUNT_PROPERTY = "insertcount";
-  
-  public static final String INSERT_START_PROPERTY_DEFAULT = "0";
-  
-  private volatile AtomicBoolean stopRequested = new AtomicBoolean(false);
-  
-  /** Operations available for a database. */
-  public enum Operation {
-    READ,
-    UPDATE,
-    INSERT,
-    SCAN,
-    DELETE
-  }
-  
+public class ClosedEconomyWorkload extends Workload {
   /**
    * Initialize the scenario. Create any generators and other shared objects here.
    * Called once, in the main client thread, before any operations are started.
    */
   public void init(Properties p) throws WorkloadException {
-  }
-
-  /**
-   * Initialize any state for a particular client thread. Since the scenario object
-   * will be shared among all threads, this is the place to create any state that is specific
-   * to one thread. To be clear, this means the returned object should be created anew on each
-   * call to initThread(); do not return the same object multiple times.
-   * The returned object will be passed to invocations of doInsert() and doTransaction()
-   * for this thread. There should be no side effects from this call; all state should be encapsulated
-   * in the returned object. If you have no state to retain for this thread, return null. (But if you have
-   * no state to retain for this thread, probably you don't need to override initThread().)
-   * 
-   * @return false if the workload knows it is done for this thread. Client will terminate the thread.
-   * Return true otherwise. Return true for workloads that rely on operationcount. For workloads that read
-   * traces from a file, return true when there are more to do, false when you are done.
-   */
-  public Object initThread(Properties p, int mythreadid, int threadcount) throws WorkloadException {
-    return null;
+      // TODO: implement me
   }
       
   /**
@@ -90,7 +49,21 @@ public abstract class Workload {
    * effects other than DB operations and mutations on threadstate. Mutations to threadstate do not need to be
    * synchronized, since each thread has its own threadstate instance.
    */
-  public abstract boolean doInsert(DB db, Object threadstate);
+  public boolean doInsert(DB db, Object threadstate) {
+      // TODO: implement me
+  }
+
+  /**
+   * Do one delete operation. Because it will be called concurrently from
+   * multiple client threads, this function must be thread safe. However,
+   * avoid synchronized, or the threads will block waiting for each other, and
+   * it will be difficult to reach the target throughput. Ideally, this
+   * function would have no side effects other than DB operations.
+   * 
+   */
+  public boolean doDelete(DB db, Object threadstate) {
+      // TODO: implement me
+  }
 
   /**
    * Do one transaction operation. Because it will be called concurrently from multiple client threads, this
@@ -103,13 +76,35 @@ public abstract class Workload {
    * Return true otherwise. Return true for workloads that rely on operationcount. For workloads that read
    * traces from a file, return true when there are more to do, false when you are done.
    */
-  public abstract boolean doTransaction(DB db, Object threadstate);
+  public boolean doTransaction(DB db, Object threadstate) {
+      // TODO: implement me
+  }
+
+  public boolean doTransactionRead(DB db) {
+      // TODO: implement me
+  }
+
+  public boolean doTransactionReadModifyWrite(DB db) {
+      // TODO: implement me
+  }
+
+  public boolean doTransactionScan(DB db) {
+      // TODO: implement me
+  }
+
+  public boolean doTransactionUpdate(DB db) {
+      // TODO: implement me
+  }
+
+  public boolean doTransactionInsert(DB db) {
+      // TODO: implement me
+  }
 
   /**
    * Allows scheduling a request to stop the workload.
    */
   public void requestStop() {
-    stopRequested.set(true);
+      stopRequested.set(true);
   }
 
   /**
@@ -117,7 +112,7 @@ public abstract class Workload {
    * @return true if stop was requested, false otherwise.
    */
   public boolean isStopRequested() {
-    return stopRequested.get();
+      return stopRequested.get();
   }
 
   /**
@@ -127,6 +122,6 @@ public abstract class Workload {
    * @throws WorkloadException 
    */
   public boolean validate(DB db) throws WorkloadException {
-    return true;
+      // TODO: implement me
   }
 }
