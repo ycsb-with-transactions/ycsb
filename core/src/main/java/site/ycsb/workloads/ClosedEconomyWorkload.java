@@ -49,7 +49,6 @@ import site.ycsb.measurements.Measurements;
  * operations. The relative proportion of different kinds of operations, and
  * other properties of the workload, are controlled by parameters specified at
  * runtime.
- *
  * Properties to control the client:
  * <UL>
  * <LI><b>fieldCount</b>: the number of fields in a record (default: 10)
@@ -96,7 +95,6 @@ public class ClosedEconomyWorkload extends Workload {
    * The name of the property for the field length distribution. Options are
    * "uniform", "zipfian" (favoring short records), "constant", and
    * "histogram".
-   *
    * If "uniform", "zipfian" or "constant", the maximum field length will be
    * that specified by the fieldlength property. If "histogram", then the
    * histogram will be read from the filename specified in the
@@ -456,7 +454,7 @@ public class ClosedEconomyWorkload extends Workload {
     HashMap<String, ByteIterator> values = new HashMap<>();
 
     String fieldKey = "field0";
-    ByteIterator data = new StringByteIterator("" + initialValue);
+    ByteIterator data = new StringByteIterator(String.valueOf(initialValue));
     values.put(fieldKey, data);
     return values;
   }
@@ -524,16 +522,22 @@ public class ClosedEconomyWorkload extends Workload {
 
     String op = operationChooser.nextString();
 
-    if (op.equals("READ")) {
-      ret = doTransactionRead(db);
-    } else if (op.equals("UPDATE")) {
-      ret = doTransactionUpdate(db);
-    } else if (op.equals("INSERT")) {
-      ret = doTransactionInsert(db);
-    } else if (op.equals("SCAN")) {
-      ret = doTransactionScan(db);
-    } else {
-      ret = doTransactionReadModifyWrite(db);
+    switch (op) {
+      case "READ":
+        ret = doTransactionRead(db);
+        break;
+      case "UPDATE":
+        ret = doTransactionUpdate(db);
+        break;
+      case "INSERT":
+        ret = doTransactionInsert(db);
+        break;
+      case "SCAN":
+        ret = doTransactionScan(db);
+        break;
+      default:
+        ret = doTransactionReadModifyWrite(db);
+        break;
     }
 
     long en = System.nanoTime();
