@@ -32,11 +32,11 @@ import java.util.*;
  * <p>
  * Properties to control the client:
  * <UL>
- * <LI><b>fieldcount</b>: the number of fields in a record (default: 10)
+ * <LI><b>fieldCount</b>: the number of fields in a record (default: 10)
  * <LI><b>fieldlength</b>: the size of each field (default: 100)
  * <LI><b>minfieldlength</b>: the minimum size of each field (default: 1)
- * <LI><b>readallfields</b>: should reads read all fields (true) or just one (false) (default: true)
- * <LI><b>writeallfields</b>: should updates and read/modify/writes update all fields (true) or just
+ * <LI><b>readAllFields</b>: should reads read all fields (true) or just one (false) (default: true)
+ * <LI><b>writeAllFields</b>: should updates and read/modify/writes update all fields (true) or just
  * one (false) (default: false)
  * <LI><b>readproportion</b>: what proportion of operations should be reads (default: 0.95)
  * <LI><b>updateproportion</b>: what proportion of operations should be updates (default: 0.05)
@@ -53,7 +53,7 @@ import java.util.*;
  * <LI><b>insertstart</b>: for parallel loads and runs, defines the starting record for this
  * YCSB instance (default: 0)
  * <LI><b>insertcount</b>: for parallel loads and runs, defines the number of records for this
- * YCSB instance (default: recordcount)
+ * YCSB instance (default: recordCount)
  * <LI><b>zeropadding</b>: for generating a record sequence compatible with string sort order by
  * 0 padding the record number. Controls the number of 0s to use for padding. (default: 1)
  * For example for row 5, with zeropadding=1 you get 'user5' key and with zeropading=8 you get
@@ -81,7 +81,7 @@ public class CoreWorkload extends Workload {
   /**
    * The name of the property for the number of fields in a record.
    */
-  public static final String FIELD_COUNT_PROPERTY = "fieldcount";
+  public static final String FIELD_COUNT_PROPERTY = "fieldCount";
 
   /**
    * Default number of fields in a record.
@@ -149,14 +149,14 @@ public class CoreWorkload extends Workload {
   public static final String READ_ALL_FIELDS_PROPERTY = "readallfields";
 
   /**
-   * The default value for the readallfields property.
+   * The default value for the readAllFields property.
    */
   public static final String READ_ALL_FIELDS_PROPERTY_DEFAULT = "true";
 
   protected boolean readallfields;
 
   /**
-   * The name of the property for determining how to read all the fields when readallfields is true.
+   * The name of the property for determining how to read all the fields when readAllFields is true.
    * If set to true, all the field names will be passed into the underlying client. If set to false,
    * null will be passed into the underlying client. When passed a null, some clients may retrieve
    * the entire row with a wildcard, which may be slower than naming all the fields.
@@ -177,7 +177,7 @@ public class CoreWorkload extends Workload {
   public static final String WRITE_ALL_FIELDS_PROPERTY = "writeallfields";
 
   /**
-   * The default value for the writeallfields property.
+   * The default value for the writeAllFields property.
    */
   public static final String WRITE_ALL_FIELDS_PROPERTY_DEFAULT = "false";
 
@@ -449,10 +449,10 @@ public class CoreWorkload extends Workload {
         Long.parseLong(p.getProperty(INSERT_START_PROPERTY, INSERT_START_PROPERTY_DEFAULT));
     long insertcount=
         Integer.parseInt(p.getProperty(INSERT_COUNT_PROPERTY, String.valueOf(recordcount - insertstart)));
-    // Confirm valid values for insertstart and insertcount in relation to recordcount
+    // Confirm valid values for insertstart and insertcount in relation to recordCount
     if (recordcount < (insertstart + insertcount)) {
-      System.err.println("Invalid combination of insertstart, insertcount and recordcount.");
-      System.err.println("recordcount must be bigger than insertstart + insertcount.");
+      System.err.println("Invalid combination of insertstart, insertcount and recordCount.");
+      System.err.println("recordCount must be bigger than insertstart + insertcount.");
       System.exit(-1);
     }
     zeropadding =
@@ -467,7 +467,7 @@ public class CoreWorkload extends Workload {
 
     dataintegrity = Boolean.parseBoolean(
         p.getProperty(DATA_INTEGRITY_PROPERTY, DATA_INTEGRITY_PROPERTY_DEFAULT));
-    // Confirm that fieldlengthgenerator returns a constant if data
+    // Confirm that fieldLengthGenerator returns a constant if data
     // integrity check requested.
     if (dataintegrity && !(p.getProperty(
         FIELD_LENGTH_DISTRIBUTION_PROPERTY,

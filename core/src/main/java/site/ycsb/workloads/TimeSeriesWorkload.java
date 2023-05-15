@@ -197,7 +197,7 @@ import site.ycsb.measurements.Measurements;
  * set. If {@code querytimespan} has been set to a positive value, then the configured
  * query time interval is added to the selected timestamp so the read passes the DB
  * a range of times. Note that during the run phase, if no data was previously loaded,
- * or if there are more {@code recordcount}s set for the run phase, reads may be sent
+ * or if there are more {@code recordCount}s set for the run phase, reads may be sent
  * to the DB with timestamps that are beyond the written data time range (or even the
  * system clock of the DB).
  * <p>
@@ -219,7 +219,7 @@ import site.ycsb.measurements.Measurements;
  * <b>Threads</b>
  * <p>
  * For a multi-threaded execution, the number of time series keys set via the 
- * {@code fieldcount} property, must be greater than or equal to the number of
+ * {@code fieldCount} property, must be greater than or equal to the number of
  * threads set via {@code threads}. This is due to each thread choosing a subset
  * of the total number of time series keys and being responsible for writing values 
  * for each time series containing those keys at each timestamp. Thus each thread
@@ -595,7 +595,7 @@ public class TimeSeriesWorkload extends Workload {
     } else if (requestdistrib.compareTo("zipfian") == 0) {
       keychooser = new ScrambledZipfianGenerator(0, numKeys - 1);
     //} else if (requestdistrib.compareTo("latest") == 0) {
-    //  keychooser = new SkewedLatestGenerator(transactioninsertkeysequence);
+    //  keyChooser = new SkewedLatestGenerator(transactionInsertKeySequence);
     } else if (requestdistrib.equals("hotspot")) {
       double hotsetfraction =
           Double.parseDouble(p.getProperty(CoreWorkload.HOTSPOT_DATA_FRACTION, 
